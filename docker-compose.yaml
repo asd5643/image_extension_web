@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  # 後端服務
+  backend:
+    build: ./backend
+    container_name: video_expand_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # (可選) 把本機的 checkpoints 掛載進去，這樣不用每次都重新 copy 模型權重
+      - ./backend/checkpoints:/app/checkpoints
+      # 把結果掛載出來，方便你在本機查看
+      - ./backend/results:/app/results
+    restart: always
+
+  # 前端服務
+  frontend:
+    build: ./frontend
+    container_name: video_expand_frontend
+    ports:
+      - "80:80" # 將容器的 80 port 對應到本機的 80 port
+    depends_on:
+      - backend # 確保後端先啟動
+    restart: always

@@ -1,0 +1,242 @@
+/* frontend/src/App.css */
+:root {
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --text-main: #ffffff;
+  --text-secondary: #aaaaaa;
+  --accent-color: #00e676;
+  --accent-hover: #00c853;
+  --error-color: #ff5252;
+  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* [關鍵修正] 強制 HTML, Body 和 React Root 佔滿 100% */
+html, body, #root {
+  width: 100%;
+  min-height: 100vh; /* 確保高度至少跟螢幕一樣高 */
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  /* 確保內容垂直置中 (可選) */
+  display: flex;
+  justify-content: center; 
+}
+
+/* 容器設定：Flex 佈局來達成水平/垂直置中 */
+.container {
+  width: 100%;
+  max-width: 1200px; /* 限制最大寬度，避免在大螢幕太散 */
+  margin: 0 auto;    /* 水平置中 */
+  padding: 40px 20px;
+  box-sizing: border-box; /* 讓 padding 不會撐大寬度 */
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* [關鍵] 讓內部所有元素(卡片、標題)水平置中 */
+  justify-content: flex-start; /* 內容從上面開始排 */
+}
+
+/* 標題區塊 */
+header {
+  width: 100%; /* 確保標題區塊佔滿寬度 */
+  text-align: center; /* 文字置中 */
+  margin-bottom: 40px;
+  margin-top: 60px; /* 上方留點空間 */
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #fff, var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* 上傳區塊 (卡片風格) */
+.upload-card {
+  background: var(--card-bg);
+  border: var(--glass-border);
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.3s ease;
+  /* 確保卡片本身不會跑版 */
+  margin-bottom: 40px;
+}
+
+.upload-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-color);
+}
+
+/* 自定義檔案上傳按鈕 */
+.file-input-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+  border: 2px dashed var(--text-secondary);
+  border-radius: 12px;
+  padding: 30px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex; /* 使用 Flex 讓內部圖示文字置中 */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-input-wrapper:hover {
+  border-color: var(--accent-color);
+  background: rgba(0, 230, 118, 0.05);
+}
+
+.file-input-wrapper input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.upload-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* 主要按鈕 */
+.primary-btn {
+  background: var(--accent-color);
+  color: #000;
+  font-weight: 700;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.primary-btn:disabled {
+  background: #444;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.primary-btn:not(:disabled):hover {
+  background: var(--accent-hover);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px var(--accent-color);
+}
+
+/* 進度條 */
+.progress-container {
+  margin-top: 30px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: #333;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent-color);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 10px var(--accent-color);
+}
+
+/* 結果展示區 */
+.result-section {
+  width: 100%;
+  margin-top: 30px;
+  animation: fadeIn 1s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.video-card {
+  background: var(--card-bg);
+  border: var(--glass-border);
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.video-label {
+  margin-bottom: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+video {
+  width: 100%;
+  border-radius: 8px;
+  background: #000;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  display: block; 
+}
+
+.video-expanded {
+  border: 2px solid var(--accent-color);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.error-msg {
+  color: var(--error-color);
+  margin-top: 15px;
+  background: rgba(255, 82, 82, 0.1);
+  padding: 10px;
+  border-radius: 6px;
+  display: inline-block;
+}
