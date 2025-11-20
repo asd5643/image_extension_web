@@ -1,2 +1,16 @@
+# .gitignore
 *.mp4
+
+# Python
+__pycache__/
+*.py[cod]
 .venv/
+venv/
+.env
+
+# Node.js
+node_modules/
+dist/
+.DS_Store
+
+*.pt
