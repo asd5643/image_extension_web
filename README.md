@@ -4,7 +4,7 @@ This is a video extension application platform based on Generative Adversarial N
 
 you can find our model training project at here: [imageExtend](https://github.com/JustinShih0918/imageExtend.git)
 
-## ✨ Features
+## Features
 
   * **AI Video Outpainting**: Uses GAN models to perform outpainting on every frame, reconstructing visual edges.
   * **Automated Pipeline**: The backend automatically handles frame extraction, inference, synthesis, and H.264 transcoding via FFmpeg.
@@ -70,7 +70,7 @@ After startup, access:
 
 -----
 
-### 🔵 Option B: Docker Quick Start
+### Option B: Docker Quick Start
 
 Suitable for quick previews or server deployment without manually configuring Python/Node environments.
 
@@ -98,7 +98,7 @@ After startup, access:
 
 -----
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 .
