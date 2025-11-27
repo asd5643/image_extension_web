@@ -2,12 +2,26 @@
 import os
 import shutil
 import uuid
+import json
 from fastapi import FastAPI, UploadFile, File, BackgroundTasks, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+
+
+from pathlib import Path
+from google.cloud import storage
+from google.oauth2 import service_account
+
 from core_logic import VideoExpander 
 
 app = FastAPI()
+
+# 初始化 GCS client
+service_account_info = json.loads(os.environ["GCS_KEY_JSON"])
+credentials = service_account.Credentials.from_service_account_info(service_account_info)
+storage_client = storage.Client(credentials=credentials)
+BUCKET_NAME = "ml_final_model"
+bucket = storage_client.bucket(BUCKET_NAME)
 
 # --- 設定 CORS (允許前端存取) ---
 app.add_middleware(
@@ -21,7 +35,16 @@ app.add_middleware(
 # --- 設定路徑 ---
 UPLOAD_DIR = "uploads"
 RESULT_DIR = "results"
-MODEL_PATH = "checkpoints/best_model.pth" # 請確認檔案存在
+MODEL_NAME = "best_model.pt"
+MODEL_PATH = Path("checkpoints") / MODEL_NAME # 請確認檔案存在
+
+blob = bucket.blob(MODEL_NAME)
+if not MODEL_PATH.exists():
+    print("Downloading model from GCS...")
+    blob.download_to_filename(MODEL_PATH)
+    print("Model ready.")
+else:
+    print("Model already exists locally.")
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(RESULT_DIR, exist_ok=True)
