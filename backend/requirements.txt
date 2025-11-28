@@ -6,5 +6,4 @@ opencv-python-headless
 tqdm
 torch
 torchvision
-google-cloud-storage
-google-auth
+requests
