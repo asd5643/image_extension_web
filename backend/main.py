@@ -135,12 +135,14 @@ async def upload_video(
     )
 
     # 4. 回傳資訊給前端
+    BASE_URL = "https://image-extension-web-backend.onrender.com"
+    # 4. 回傳資訊給前端
     return {
         "task_id": task_id,
         "status": "processing",
         # 現在 original_video_url 指向的是 Resize 過的原始影片
-        "original_video_url": f"http://localhost:8000/results/{resized_original_output_filename}",
-        "processed_video_url": f"http://localhost:8000/results/{expanded_output_filename}" 
+        "original_video_url": f"{BASE_URL}/results/{resized_original_output_filename}",
+        "processed_video_url": f"{BASE_URL}/results/{expanded_output_filename}"
     }
 
 @app.get("/status/{task_id}")
