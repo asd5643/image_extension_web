@@ -39,7 +39,7 @@ function App() {
     try {
       // 注意：如果你已經部署到 Server，這裡的路徑要改成 Server IP
       // 如果是 Docker 本機跑，localhost 沒問題
-      const response = await fetch('http://localhost:8000/upload', {
+      const response = await fetch('https://image-extension-web-backend.onrender.com', {
         method: 'POST',
         body: formData,
       });
