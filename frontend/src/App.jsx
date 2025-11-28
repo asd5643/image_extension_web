@@ -67,7 +67,7 @@ function App() {
     if (status === 'processing' && taskId) {
       intervalId = setInterval(async () => {
         try {
-          const res = await fetch(`http://localhost:8000/status/${taskId}`);
+          const res = await fetch(`https://image-extension-web-backend.onrender.com/status/${taskId}`);
           const data = await res.json();
           
           // 假進度條動畫 (直到 90%)
