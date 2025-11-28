@@ -2,26 +2,22 @@
 import os
 import shutil
 import uuid
-import json
+import requests
 from fastapi import FastAPI, UploadFile, File, BackgroundTasks, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 
 from pathlib import Path
-from google.cloud import storage
-from google.oauth2 import service_account
 
 from core_logic import VideoExpander 
 
 app = FastAPI()
 
 # 初始化 GCS client
-service_account_info = json.loads(os.environ["GCS_KEY_JSON"])
-credentials = service_account.Credentials.from_service_account_info(service_account_info)
-storage_client = storage.Client(credentials=credentials)
-BUCKET_NAME = "ml_final_model"
-bucket = storage_client.bucket(BUCKET_NAME)
+FILE_ID = "1dekKRF6rqbyUE1ODenr9RezTV3nJDoSk"   # <----- 記得改
+BASE_URL = "https://drive.usercontent.google.com/download?id="  # 更穩定版 URL
+DOWNLOAD_URL = f"{BASE_URL}{FILE_ID}&export=download"
 
 # --- 設定 CORS (允許前端存取) ---
 app.add_middleware(
@@ -38,11 +34,34 @@ RESULT_DIR = "results"
 MODEL_NAME = "best_model.pt"
 MODEL_PATH = Path("checkpoints") / MODEL_NAME # 請確認檔案存在
 
-blob = bucket.blob(MODEL_NAME)
+def download_from_google_drive(url, destination):
+    print("Downloading model from Google Drive...")
+    session = requests.Session()
+    response = session.get(url, stream=True)
+
+    # 如果是大檔案 → Google 會給 confirm token
+    def get_confirm_token(resp):
+        for k, v in resp.cookies.items():
+            if k.startswith('download_warning'):
+                return v
+        return None
+
+    token = get_confirm_token(response)
+    if token:
+        url_with_token = f"{url}&confirm={token}"
+        response = session.get(url_with_token, stream=True)
+
+    # 寫入檔案
+    with open(destination, "wb") as f:
+        for chunk in response.iter_content(8192):
+            if chunk:
+                f.write(chunk)
+
+    print("Model downloaded successfully.")
+
+# --- 啟動時檢查模型 ---
 if not MODEL_PATH.exists():
-    print("Downloading model from GCS...")
-    blob.download_to_filename(MODEL_PATH)
-    print("Model ready.")
+    download_from_google_drive(DOWNLOAD_URL, MODEL_PATH)
 else:
     print("Model already exists locally.")
 
