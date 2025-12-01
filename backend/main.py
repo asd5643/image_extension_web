@@ -91,9 +91,9 @@ def process_video_task(task_id: str, input_path: str, expanded_output_path: str,
         expander.process_video(input_path, expanded_output_path, resized_original_output_path)
         print(f"[{task_id}] 處理完成！")
         # 處理完後，可以刪除原始上傳的檔案
-        if os.path.exists(input_path):
-            os.remove(input_path)
-            print(f"[{task_id}] 原始上傳影片已刪除: {input_path}")
+        # if os.path.exists(input_path):
+        #    os.remove(input_path)
+        #    print(f"[{task_id}] 原始上傳影片已刪除: {input_path}")
     except Exception as e:
         print(f"[{task_id}] 處理失敗: {e}")
 
